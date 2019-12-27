@@ -112,7 +112,7 @@ public class StringTest {
     }
 
     @Test
-    public void getChar(){
+    public void getChars(){
         char[] chars = new char[15];
         String str = "오늘 날씨는 정말 좋습니다.";
         assertThat(chars.length).isEqualTo(str.length());
@@ -122,4 +122,5 @@ public class StringTest {
         str.getChars(3, 15, chars, 0);
         assertThat(Arrays.toString(chars)).contains("날");
     }
+
 }
