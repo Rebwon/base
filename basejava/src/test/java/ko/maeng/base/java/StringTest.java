@@ -3,11 +3,6 @@ package ko.maeng.base.java;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,12 +17,6 @@ public class StringTest {
         String st16 = new String(ch16, 0, 1);
         assertThat(st16.length()).isEqualTo(1);
         assertThat(st16).isEqualTo("A");
-    }
-
-    @Test
-    public void camelString(){
-        String val = new String("testValue");
-        assertThat(val).isEqualTo("testValue");
     }
 
     @Test
@@ -123,4 +112,24 @@ public class StringTest {
         assertThat(Arrays.toString(chars)).contains("날");
     }
 
+    @Test
+    public void equals(){
+        String value = "testVal";
+        assertThat(value.equals("testVal")).isTrue();
+    }
+
+    @Test
+    public void contentEquals(){
+        // equals와 다른점은 객체를 비교하는게 아닌, Char형이나 StringBuffer,String 타입의
+        // 입력값의 문자 순서를 비교함.
+        String value = "testVal";
+        assertThat(value.contentEquals(value)).isTrue();
+    }
+
+    @Test
+    public void equalsIgnoreCase(){
+        // 대소문자 구별 안하고 String 비교함.
+        String value = "testVal";
+        assertThat(value.equalsIgnoreCase("testval")).isTrue();
+    }
 }
