@@ -132,4 +132,70 @@ public class StringTest {
         String value = "testVal";
         assertThat(value.equalsIgnoreCase("testval")).isTrue();
     }
+
+    @Test
+    public void compareTo(){
+        // compareTo(String value) return int
+        // 문자열의 길이를 비교한다.
+        // 같을경우 0 아닐경우 1
+        String value = "testVal";
+        assertThat(value.compareTo("testVa")).isEqualTo(1);
+        assertThat(value.compareTo("testVal")).isEqualTo(0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void compareToIgnoreCase(){
+        // compareToIgnoreCase(String value) return int
+        // 문자열의 길이를 비교한다. (대소문자 구별 안함)
+        // 같을 경우 0 아닐경우 1
+        // null을 넣을경우 NullPointerException 발생.
+        String value = "testVal";
+        assertThat(value.compareToIgnoreCase("testval")).isEqualTo(0);
+        assertThat(value.compareToIgnoreCase("testva")).isEqualTo(1);
+        value.compareToIgnoreCase(null);
+    }
+
+    @Test
+    public void regionMatches() {
+        // regionMatches(참조문자열시작인덱스, 비교할문자열, 비교할문자열의 시작인덱스, 끝인덱스)
+        String value = "weather is sunny";
+        assertThat(value.regionMatches(0, "weather", 0, 6)).isTrue();
+        assertThat(value.regionMatches(11, "sunny", 0, 4)).isTrue();
+    }
+
+    @Test
+    public void startsWith() {
+        String value = "weather is sunny";
+        assertThat(value.startsWith("weather", 0)).isTrue();
+        assertThat(value.startsWith("weather", 1)).isFalse();
+        assertThat(value.startsWith("sunny", 11)).isTrue();
+        assertThat(value.startsWith("sunny", 10)).isFalse();
+    }
+
+    @Test
+    public void endsWith() {
+        String value = "weather is sunny";
+        assertThat(value.endsWith("sunny")).isTrue();
+        assertThat(value.endsWith("unny")).isTrue();
+        assertThat(value.endsWith("nny")).isTrue();
+        assertThat(value.endsWith("ny")).isTrue();
+        assertThat(value.endsWith("y")).isTrue();
+        assertThat(value.endsWith("is")).isFalse();
+    }
+
+    @Test
+    public void indexOf(){
+        // indexOf(String) return int
+        // String의 인덱스의 위치를 반환한다.
+        // indexOf(String, int) return int
+        // String의 인덱스 위치를 반환하되, 찾고자하는 문자열이 중복이라면,
+        // 무조건 다음 중복 문자의 위치를 반환.
+        String value = "indexOf";
+        assertThat(value.indexOf("i")).isEqualTo(0);
+        assertThat(value.indexOf("d")).isEqualTo(2);
+        assertThat(value.indexOf("x")).isEqualTo(4);
+        assertThat(value.indexOf("i", 1)).isEqualTo(-1);
+        value = "indexOf indexOf";
+        assertThat(value.indexOf("i", 1)).isEqualTo(8);
+    }
 }

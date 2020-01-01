@@ -1,6 +1,7 @@
 package ko.maeng.base.javajigi.optional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class User {
     private String name;
@@ -35,6 +36,9 @@ public class User {
     }
 
     public static boolean ageIsInRange2(User user) {
+        // TODO 이부분에 구현하라.
+        boolean isInRange = false;
+
         return false;
     }
 

@@ -47,11 +47,8 @@ public class StreamStudy {
 
         // TODO 이 부분에 구현한다.
         // 단어의 길이를 비교해서 긴 단어를 기준으로 오름차순 정렬을 한다.
-        // return 값이 0이나 음수면 자리바꿈을 하지 않고, 양수면 자리 바꿈을 수행한다.
-        Comparator<String> longest = (x, y) -> (x.length() > y.length()) ? -1 : ((x.length() == y.length()) ? 0 : 1);
-
         words.stream()
-                .sorted(longest)
+                .sorted((s1, s2) -> s2.length() - s1.length())
                 .limit(100)
                 .collect(Collectors.toList()).forEach(System.out::println);
     }

@@ -21,6 +21,7 @@ public class ComputerStore {
     }
 
     public static String getVersionOptional(Computer computer) {
+        // TODO 이부분에 구현하라.
         return null;
     }
 }
