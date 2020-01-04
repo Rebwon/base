@@ -16,28 +16,7 @@ public class StreamStudy {
                         .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        long count = 0;
-        for(String w : words){
-            if(w.length() > 12) count++;
-        }
-        return count;
-    }
-
-    public static List<String> selectWords() throws IOException {
-        String contents = new String(Files.readAllBytes(Paths
-                .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
-        List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
-
-        Comparator<String> longest = new Comparator<String>() {
-            @Override
-            public int compare(String x, String y) {
-                return (x.length() > y.length()) ? -1 : ((x.length() == y.length()) ? 0 : 1);
-            }
-        };
-
-        return words.stream().sorted(longest)
-                .limit(100)
-                .collect(Collectors.toList());
+        return words.stream().filter(w -> w.length() > 12).count();
     }
 
     public static void printLongestWordTop100() throws IOException{
@@ -45,12 +24,14 @@ public class StreamStudy {
                 .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        // TODO 이 부분에 구현한다.
         // 단어의 길이를 비교해서 긴 단어를 기준으로 오름차순 정렬을 한다.
         words.stream()
-                .sorted((s1, s2) -> s2.length() - s1.length())
+                .filter(w -> w.length() > 12)
+                .sorted((w1, w2) -> w2.length() - w1.length())
+                .distinct()
                 .limit(100)
-                .collect(Collectors.toList()).forEach(System.out::println);
+                .map(String::toLowerCase)
+                .forEach(System.out::println);
     }
 
     public static List<Integer> doubleNumbers(List<Integer> numbers) {

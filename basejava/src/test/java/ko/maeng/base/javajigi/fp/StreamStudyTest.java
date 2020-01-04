@@ -1,7 +1,6 @@
 package ko.maeng.base.javajigi.fp;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -21,12 +20,6 @@ public class StreamStudyTest {
     public void countWords() throws Exception {
         long result = StreamStudy.countWords();
         System.out.println("result : " + result);
-    }
-
-    @Test
-    public void selectWords() throws Exception {
-        List<String> words = StreamStudy.selectWords();
-        assertThat(words).hasSize(100);
     }
 
     @Test

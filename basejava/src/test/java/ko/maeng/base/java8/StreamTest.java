@@ -1,4 +1,4 @@
-package ko.maeng.base.java;
+package ko.maeng.base.java8;
 
 import ko.maeng.base.java8.Product;
 import org.junit.Before;
@@ -14,10 +14,9 @@ import java.util.stream.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StreamTest {
-    // Stream은 한 번 사용하면 닫힌다.
-    // Test의 경우 한 번 테스트를 실행하면 닫히기 때문에
-    // 스트림 인스턴스로 1번 이상의 테스트를 실행할 수 없다.
-    // 각각의 다른 인스턴스로 다양한 테스트를 해야만 가능하다.
+    // Stream은 종료 작업을 처리하면 사용이 불가하다.
+    // 종료 작업을 처리하지 않고 사용할 경우
+    // 하나의 인스턴스로 여러 작업을 실행할 수 있다.
     private List<Product> products;
     private List<String> lang;
 
@@ -293,12 +292,14 @@ public class StreamTest {
                         Integer::sum, // 총 3번 동작함.
                         (a, b) -> {   // 총 2번 동작함.
                             System.out.println("combiner was called");
+                            System.out.println(a + "+" + b + "=" + (a+b));
                             return a + b;
                         });
         // accumulator의 동작 : 초기값 10을 더한 세 개의 값
         // (10+1, 10+2, 10+3)을 Combiner에게 전달
         // Combiner는 (12+13 == 25)로 먼저 더한 후 (25+11=36)으로 최종값 반환.
-        // TODO Combiner 동작에 대해서 조금 더 살펴보자.
+        // 더하는 순서는 (a + b) + c 나 (a + c) + b나 동일하기 때문에
+        // 순서는 아무런 상관이 없다.
         assertThat(reducedParallel).isEqualTo(36);
     }
 

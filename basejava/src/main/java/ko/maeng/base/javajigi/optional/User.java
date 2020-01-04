@@ -1,6 +1,5 @@
 package ko.maeng.base.javajigi.optional;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class User {
@@ -36,10 +35,10 @@ public class User {
     }
 
     public static boolean ageIsInRange2(User user) {
-        // TODO 이부분에 구현하라.
-        boolean isInRange = false;
-
-        return false;
+        return Optional.ofNullable(user)
+                .map(User::getAge)
+                .filter(age -> age >= 30 && age <= 45)
+                .isPresent();
     }
 
     @Override
