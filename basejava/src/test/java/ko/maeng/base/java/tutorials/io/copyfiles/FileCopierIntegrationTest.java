@@ -1,0 +1,64 @@
+package ko.maeng.base.java.tutorials.io.copyfiles;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class FileCopierIntegrationTest {
+    File original = new File("src/test/resources/original.txt");
+
+    @Before
+    public void init() throws IOException {
+        if(!original.exists())
+            Files.createFile(original.toPath());
+    }
+
+    @Test
+    public void copyExistsWithSameContents() throws IOException {
+        File copied = new File("src/test/resources/copiedWithIo.txt");
+        try(InputStream in = new BufferedInputStream(new FileInputStream(original));
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(copied))) {
+            byte[] buffer = new byte[1024];
+            int lengthRead;
+            while((lengthRead = in.read(buffer)) > 0) {
+                out.write(buffer, 0, lengthRead);
+                out.flush();
+            }
+        }
+        assertThat(copied).exists();
+        assertThat(Files.readAllLines(original.toPath())).isEqualTo(Files.readAllLines(copied.toPath()));
+    }
+
+    @Test
+    public void apacheCommonsCopyExistsWithSameContents() throws IOException {
+        File copied = new File("src/test/resources/copiedWithApacheCommons.txt");
+        FileUtils.copyFile(original, copied);
+        assertThat(copied).exists();
+        assertThat(Files.readAllLines(original.toPath())).isEqualTo(Files.readAllLines(copied.toPath()));
+    }
+
+    @Test
+    public void nIOCopyExistsWithSameContents() throws IOException {
+        Path copied = Paths.get("src/test/resources/copiedWithNio.txt");
+        Path originalPath = original.toPath();
+        Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+        assertThat(copied).exists();
+        assertThat(Files.readAllLines(originalPath).equals(Files.readAllLines(copied)));
+    }
+
+    @Test
+    public void guavaCopyExistsWithSameContents() throws IOException {
+        File copied = new File("src/test/resources/copiedWithApacheCommons.txt");
+        com.google.common.io.Files.copy(original, copied);
+        assertThat(copied).exists();
+        assertThat(Files.readAllLines(original.toPath())).isEqualTo(Files.readAllLines(copied.toPath()));
+    }
+}

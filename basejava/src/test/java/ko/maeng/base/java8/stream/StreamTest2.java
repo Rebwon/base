@@ -1,4 +1,4 @@
-package ko.maeng.base.java8;
+package ko.maeng.base.java8.stream;
 
 import ko.maeng.base.java8.Product;
 import org.junit.Before;

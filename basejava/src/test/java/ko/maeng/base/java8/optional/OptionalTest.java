@@ -1,4 +1,4 @@
-package ko.maeng.base.java8;
+package ko.maeng.base.java8.optional;
 
 import org.junit.Before;
 import org.junit.Test;

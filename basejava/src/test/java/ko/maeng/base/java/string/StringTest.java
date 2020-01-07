@@ -1,4 +1,4 @@
-package ko.maeng.base.java;
+package ko.maeng.base.java.string;
 
 import org.junit.Test;
 
