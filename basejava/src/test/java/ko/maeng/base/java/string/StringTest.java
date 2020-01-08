@@ -10,7 +10,7 @@ public class StringTest {
 
     @Test
     public void constructString(){
-        String val = new String();  // 생성자 기본은 "" null값은 없음.
+        String val = "";  // String 객체를 생성할 때 가급적이면 생성자로 객체를 생성하지 마라.
         assertThat(val).isEqualTo("");
 
         int[] ch16 = {0x0041}; // A
