@@ -5,9 +5,12 @@ import java.util.List;
 
 public class Gamer implements Player{
     private List<Card> cards;
+    private boolean turn;
+    private String name;
 
-    public Gamer() {
+    public Gamer(String name) {
         cards = new ArrayList<>();
+        this.name = name;
     }
 
     public void receiveCard(Card card) {
@@ -29,5 +32,29 @@ public class Gamer implements Player{
 
     public List<Card> openCards() {
         return this.cards;
+    }
+
+    @Override
+    public void turnOff() {
+        this.setTurn(false);
+    }
+
+    @Override
+    public void turnOn() {
+        this.setTurn(true);
+    }
+
+    @Override
+    public boolean isTurn() {
+        return this.turn;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
     }
 }

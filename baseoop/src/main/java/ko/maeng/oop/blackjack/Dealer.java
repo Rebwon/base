@@ -5,7 +5,11 @@ import java.util.List;
 
 public class Dealer implements Player{
     private List<Card> cards;
+    private boolean turn;
+    private String name;
+
     private static final int CAN_RECEIVE_POINT = 16;
+    private static final String NAME = "딜러";
 
     public Dealer() {
         cards = new ArrayList<>();
@@ -47,5 +51,29 @@ public class Dealer implements Player{
 
     public List<Card> openCards() {
         return this.cards;
+    }
+
+    @Override
+    public void turnOff() {
+        this.setTurn(false);
+    }
+
+    @Override
+    public void turnOn() {
+        this.setTurn(true);
+    }
+
+    @Override
+    public boolean isTurn() {
+        return this.turn;
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
     }
 }

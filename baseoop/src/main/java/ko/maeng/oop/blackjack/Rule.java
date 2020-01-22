@@ -3,12 +3,25 @@ package ko.maeng.oop.blackjack;
 import java.util.List;
 
 public class Rule {
-    public int getScore(List<Card> cards){
-        // TODO 점수를 측정하는 메서드
-        return 0;
+    public int getPointSum(List<Card> cards){
+        int sum = 0;
+        for(Card card : cards){
+            sum += card.getPoint();
+        }
+        return sum;
     }
 
-    public void getWinner(Dealer dealer, Gamer gamer) {
-        // TODO 승패를 판단한다.
+    public Player getWinner(List<Player> players) {
+        Player higherPlayer = null;
+        int highestPoint = 0;
+
+        for(Player player : players){
+            int playerPointSum = getPointSum(player.openCards());
+            if(playerPointSum > highestPoint){
+                higherPlayer = player;
+                highestPoint = playerPointSum;
+            }
+        }
+        return higherPlayer;
     }
 }
