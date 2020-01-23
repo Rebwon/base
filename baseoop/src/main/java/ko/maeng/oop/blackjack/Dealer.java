@@ -6,7 +6,6 @@ import java.util.List;
 public class Dealer implements Player{
     private List<Card> cards;
     private boolean turn;
-    private String name;
 
     private static final int CAN_RECEIVE_POINT = 16;
     private static final String NAME = "딜러";
@@ -31,7 +30,7 @@ public class Dealer implements Player{
     private int getPointSum() {
         int sum = 0;
         for(Card card : cards){
-            sum += card.getPoint();
+            sum += card.getDenomination().getPoint();
         }
         return sum;
     }

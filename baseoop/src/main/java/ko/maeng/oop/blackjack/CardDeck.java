@@ -1,39 +1,34 @@
 package ko.maeng.oop.blackjack;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Stack;
 
 public class CardDeck {
-    private List<Card> cards;
-    private static final String[] PATTERNS = {"spade", "heart", "clover", "diamond"};
-    private static final int CARD_COUNT = 13;   // 1은 A 2~10은 숫자 11,12,13은 J,Q,K으로 구분.
+    private Stack<Card> cards;
 
     public CardDeck() {
         cards = this.generateCards();
+        Collections.shuffle(this.cards);
     }
 
-    private List<Card> generateCards() {
-        cards = new LinkedList<>();
+    private Stack<Card> generateCards() {
+        Stack<Card> cards = new Stack<>();
 
-        for(String pattern : PATTERNS){
-            for(int i=1; i<=CARD_COUNT; i++){
-                Card card = new Card(pattern, i);
-                cards.add(card);
+        for(Card.Pattern pattern : Card.Pattern.values()){
+            for(Card.Denomination denomination : Card.Denomination.values()){
+                Card card = new Card(pattern, denomination);
+                cards.push(card);
             }
         }
         return cards;
     }
 
     public Card draw() {
-        Card selectedCard = getRandomCard();
-        cards.remove(selectedCard);
-        return selectedCard;
+        return this.cards.pop();
     }
 
-    private Card getRandomCard() {
-        int size = cards.size();
-        int select = (int)(Math.random()*size);
-        return cards.get(select);
+    public Stack<Card> getCards() {
+        return cards;
     }
 
     @Override

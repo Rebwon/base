@@ -6,7 +6,7 @@ public class Rule {
     public int getPointSum(List<Card> cards){
         int sum = 0;
         for(Card card : cards){
-            sum += card.getPoint();
+            sum += card.getDenomination().getPoint();
         }
         return sum;
     }
