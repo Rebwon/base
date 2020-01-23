@@ -1,8 +1,8 @@
-package ko.maeng.oop.blackjack;
+package ko.maeng.oop.blackjack.domain;
 
 public class Card {
-    private Pattern pattern; // 무늬
-    private Denomination denomination;    // 끗수(A,2~10,K,Q,J)
+    private Pattern pattern;    // 무늬
+    private Denomination denomination;  // 끗수(A,2~10,K,Q,J)
 
     public Card(Pattern pattern, Denomination denomination) {
         this.pattern = pattern;

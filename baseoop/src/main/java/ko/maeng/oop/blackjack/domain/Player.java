@@ -1,13 +1,11 @@
-package ko.maeng.oop.blackjack;
+package ko.maeng.oop.blackjack.domain;
 
-import java.util.List;
+import java.util.Stack;
 
 public interface Player {
     void receiveCard(Card card);
 
-    void showCards();
-
-    List<Card> openCards();
+    Stack<Card> openCards();
 
     void turnOff();
 

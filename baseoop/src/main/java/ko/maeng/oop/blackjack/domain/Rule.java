@@ -1,4 +1,4 @@
-package ko.maeng.oop.blackjack;
+package ko.maeng.oop.blackjack.domain;
 
 import java.util.List;
 

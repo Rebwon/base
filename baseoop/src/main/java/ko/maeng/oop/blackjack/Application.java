@@ -2,7 +2,8 @@ package ko.maeng.oop.blackjack;
 
 public class Application {
     public static void main(String[] args) {
-        Game game = new Game();
+        Client client = new Client();
+        Game game = new Game(client);
         game.play();
     }
 }

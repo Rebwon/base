@@ -1,25 +1,25 @@
-package ko.maeng.oop.blackjack;
+package ko.maeng.oop.blackjack.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import ko.maeng.oop.blackjack.exception.OutOfPointException;
+
+import java.util.Stack;
 
 public class Dealer implements Player{
-    private List<Card> cards;
+    private Stack<Card> cards;
     private boolean turn;
 
     private static final int CAN_RECEIVE_POINT = 16;
     private static final String NAME = "딜러";
 
     public Dealer() {
-        cards = new ArrayList<>();
+        cards = new Stack<>();
     }
 
     public void receiveCard(Card card) {
         if(this.isReceiveCard()){
-            this.cards.add(card);
-            this.showCards();
+            this.cards.push(card);
         } else{
-            System.out.println("카드의 총 합이 17이상입니다. 더이상 카드를 받을 수 없습니다.");
+            throw new OutOfPointException("카드의 총 합이 17이상입니다. 더이상 카드를 받을 수 없습니다.");
         }
     }
 
@@ -35,20 +35,7 @@ public class Dealer implements Player{
         return sum;
     }
 
-
-    public void showCards() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("현재 보유 카드 목록 \n");
-
-        for(Card card : cards){
-            sb.append(card.toString());
-            sb.append("\n");
-        }
-
-        System.out.println(sb.toString());
-    }
-
-    public List<Card> openCards() {
+    public Stack<Card> openCards() {
         return this.cards;
     }
 

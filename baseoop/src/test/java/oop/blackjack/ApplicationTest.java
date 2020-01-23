@@ -1,7 +1,7 @@
 package oop.blackjack;
 
-import ko.maeng.oop.blackjack.Card;
-import ko.maeng.oop.blackjack.CardDeck;
+import ko.maeng.oop.blackjack.domain.Card;
+import ko.maeng.oop.blackjack.domain.CardDeck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
