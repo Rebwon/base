@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.maxBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,6 +19,4 @@ public class CollectorTest {
 
         assertThat(collect.get()).isEqualTo("pork");
     }
-
-
 }
