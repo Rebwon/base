@@ -22,9 +22,23 @@ public class PrimePartition {
                 .collect(partitioningBy(candidate -> isPrime(candidate)));
     }
 
+    public static Map<Boolean, List<Integer>> partitionPrimesWithCustomCollector(int n) {
+        return IntStream.rangeClosed(2, n).boxed()
+                .collect(new PrimeNumbersCollector());
+    }
+
     public static void main(String[] args) {
         // n개의 숫자를 입력받아 소수와 비소수를 나누는 프로그램.
-        System.out.println(partitionPrimes(50).get(true));
-        System.out.println(partitionPrimes(50).get(false));
+        long fastest = Long.MAX_VALUE;
+        for(int i=0; i<10; i++){
+            long start = System.nanoTime();
+            //partitionPrimes(1_000_000);
+            partitionPrimesWithCustomCollector(1_000_000);
+            long duration = (System.nanoTime() - start) / 1_000_000;
+            if(duration < fastest){
+                fastest = duration;
+            }
+        }
+        System.out.println("Fastest execution done in " + fastest + "msecs");
     }
 }
