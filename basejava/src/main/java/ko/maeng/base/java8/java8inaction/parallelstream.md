@@ -110,3 +110,39 @@ public static class Accumulator {
 서브태스크 각각의 결과를 합쳐서 전체 결과를 만들도록 설계되었다. 포크/조인 프레임워크에서는 
 서브태스크를 스레드 풀(ForkJoinPool)의 작업자 스레드에 분산 할당하는 ExecutorService 인터페이스를 구현한다.
 
+포크/조이니 프레임워크를 제대로 사용하는 방법.
+
+```java
+public static long forkJoinSum(long n){
+    long[] numbers = LongStream.rangeClosed(1, n).toArray();
+    ForkJoinTask<Long> task = new ForkJoinSumCalculator(numbers);
+    return new ForkJoinPool().invoke(task);
+}
+
+@Override
+protected Long compute() {
+    int length = end - start;
+    if(length <= THRESHOLD){
+        return computeSequentially();
+    }
+    ForkJoinSumCalculator leftTask = new ForkJoinSumCalculator(numbers, start, start+length/2);
+    leftTask.fork();
+    ForkJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start+length/2, end);
+    Long rightResult = rightTask.compute();
+    Long leftResult = leftTask.join();
+    return leftResult + rightResult;
+}
+```
+
+1. join메서드를 태스크에 호출하면 태스크가 생산하는 결과가 준비될 때까지 호출자를 블록시킨다. 따라서 두 서브 태스크가 모두 시작된 다음에 join을 호출해야 한다.
+그렇지 않으면 각각의 서브태스크가 다른 태스크가 끝나길 기다리는 일이 발생하며 원래 순차 알고리즘보다 느리고 복잡한 프로그램이 되어버릴 수 있다.
+2. RecursiveTask 내에서는 ForkJoinPool의 invoke메서드를 사용하지 말아야 한다. 대신 compute나 fork메서드를 직접 호출할 수 있다. 순차 코드에서 병렬 계산을 시작할
+때만 invoke를 사용한다.
+3. 서브태스크에 fork메서드를 호출해서 ForkJoinPool의 일정을 조절할 수 있다. 왼쪽과 오른쪽 작업 모두에 fork 메서드를 호출하는 것이 자연스러울 것 같지만, 한쪽 작업에는 fork를
+호출하는 것보다는 compute를 호출하는 것이 효율적이다. 그러면 두 서브 태스크의 한 태스크에는 같은 스레드를 재사용할 수 있으므로 풀에서 불필요한 태스크를 할당하는 오버헤드를 피할 수 있다.
+4. 포크/조인 프레임워크를 사용하는 병렬 계산은 디버깅이 어렵다. 보통 IDE로 디버깅할 때 스택 트레이스로 문제가 일어난 과정을 쉽게 확인할 수 있는데, 포크/조인 프레임워크에서는 fork라 
+불리는 다른 스레드에서 compute를 호출하므로 스택 트레이스가 도움이 되지 않는다.
+5. 병렬 스트림에서 살펴본 것처럼 멀티코어에 포크/조인 프레임워크를 사용하는 것이 순차처리보다 무조건 빠를 거라는 생각은 버려야 한다. 병렬 처리로 성능을 개선하려면 태스크를 여러 독립적인
+서브태스크로 분할할 수 있어야 한다. 각 서브태스크의 실행시간은 새로운 태스크를 포킹하는 데 드는 시간보다 길어야 한다. 또한 순차 버전과 병렬 버전의 성능을 비교할 때는 다른 요소도 고려해야 한다. 
+다른 자바 코드와 마찬가지로 JIT(Just In Time) 컴파일러에 의해 최적화되려면 몇 차례의 준비과정 또는 실행과정을 거쳐야 한다. 따라서 성능을 측정할 때는 여러 번 프로그램을 실행한 결과를 측정해야 한다.
+

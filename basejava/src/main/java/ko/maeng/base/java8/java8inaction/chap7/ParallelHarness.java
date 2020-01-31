@@ -4,8 +4,10 @@ import java.util.function.Function;
 
 public class ParallelHarness {
     public static void main(String[] args) {
-        System.out.println("Sequential sum done in : " +
-                measureSumPerf(ParallelStreams::parallelRangedSum, 2_000_000) + " msecs");
+//        System.out.println("Sequential sum done in : " +
+//                measureSumPerf(ParallelStreams::parallelRangedSum, 2_000_000) + " msecs");
+        System.out.println("ForkJoin sum done in : " +
+                measureSumPerf(ForkJoinSumCalculator::forkJoinSum, 10_000_000) + " msecs");
     }
 
     public static long measureSumPerf(Function<Long, Long> adder, long n){
