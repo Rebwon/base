@@ -68,5 +68,6 @@ public class Grouping {
                 }, toCollection(HashSet::new))));
         System.out.println(caloricLevelsByType);
     }
+
     public enum CaloricLevel {DIET, NORMAL, FAT}
 }

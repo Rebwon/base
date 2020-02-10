@@ -21,12 +21,12 @@ public class PrimeNumbersCollector implements Collector<Integer, Map<Boolean, Li
     }
 
     @Override
-    public BinaryOperator<Map<Boolean, List<Integer>>> combiner() throws UnsupportedOperationException{
+    public BinaryOperator<Map<Boolean, List<Integer>>> combiner() throws UnsupportedOperationException {
         return (Map<Boolean, List<Integer>> map1,
                 Map<Boolean, List<Integer>> map2) -> {
-                    map1.get(true).addAll(map2.get(true));
-                    map1.get(false).addAll(map2.get(false));
-                    return map1;
+            map1.get(true).addAll(map2.get(true));
+            map1.get(false).addAll(map2.get(false));
+            return map1;
         };
     }
 
@@ -43,8 +43,8 @@ public class PrimeNumbersCollector implements Collector<Integer, Map<Boolean, Li
     // 대상의 제곱보다 큰 소수를 찾으면 검사를 중단함.
     public static <A> List<A> takeWhile(List<A> list, Predicate<A> p) {
         int i = 0;
-        for(A item : list) {
-            if(!p.test(item)){
+        for (A item : list) {
+            if (!p.test(item)) {
                 return list.subList(0, i);
             }
             i++;
