@@ -7,20 +7,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DistinctKeyTest {
     @Test
     public void name() {
-        List<OptionGroupSpec> dbLists = dbRecords();
+        Product product = new Product(1l, "뮤즈", dbRecords());
         List<OptionGroupSpec> update = getRecords();
 
-        List<OptionGroupSpec> list = dbLists.stream()
-                .flatMap(before ->
-                        update.stream()
-                                .filter(distinctByKey(OptionGroupSpec::getDetail)))
-                .collect(Collectors.toList());
+        Stream<OptionGroupSpec> stream = product.getOptionGroupSpecs().stream();
+        Stream<OptionGroupSpec> updateStream = update.stream();
+        List<OptionGroupSpec> list = Stream.concat(stream, updateStream)
+                .filter(distinctByKeys(OptionGroupSpec::getDetail)).collect(Collectors.toList());
 
         System.out.println(list);
         System.out.println(list.size());
@@ -31,6 +31,16 @@ public class DistinctKeyTest {
                 System.out.println(each);
             }
         }
+    }
+
+    public static <T> Predicate<T> distinctByKeys(Function<? super T, Object>... keyExtractors) {
+        final Map<List<?>, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> {
+            final List<?> keys = Arrays.stream(keyExtractors)
+                    .map(ke -> ke.apply(t))
+                    .collect(Collectors.toList());
+            return seen.putIfAbsent(keys, Boolean.TRUE) == null;
+        };
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
@@ -49,23 +59,33 @@ public class DistinctKeyTest {
                 ));
 
 
-        records.add(new OptionGroupSpec(1l, "AGE", optionSpecs));
+        records.add(new OptionGroupSpec(2l, "AGE", optionSpecs));
 
         return records;
     }
 
     private static List<OptionGroupSpec> dbRecords() {
         ArrayList<OptionGroupSpec> records = new ArrayList<>();
-        ArrayList<OptionSpec> optionSpecs = new ArrayList<>();
+        ArrayList<OptionSpec> optionSpecs1 = new ArrayList<>();
 
-        optionSpecs.addAll(Arrays.asList(
-                new OptionSpec(1l, "도록패키지", 17000),
+        optionSpecs1.addAll(Arrays.asList(
+                new OptionSpec(1l, "도록패키지", 19000),
                 new OptionSpec(2l, "오디오패키지", 14000),
                 new OptionSpec(3l, "커플패키지", 12000)
         ));
 
+        ArrayList<OptionSpec> optionSpecs2 = new ArrayList<>();
 
-        records.add(new OptionGroupSpec(1l, "PACKAGE", optionSpecs));
+        optionSpecs2.addAll(Arrays.asList(
+                new OptionSpec(1l, "성인", 14000),
+                new OptionSpec(2l, "청소년", 12000),
+                new OptionSpec(3l, "아이", 10000)
+        ));
+
+        records.addAll(Arrays.asList(
+                new OptionGroupSpec(1l, "PACKAGE", optionSpecs1),
+                new OptionGroupSpec(2l, "AGE", optionSpecs2)
+        ));
 
         return records;
     }
