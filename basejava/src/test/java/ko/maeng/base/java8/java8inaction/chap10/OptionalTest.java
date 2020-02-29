@@ -23,6 +23,6 @@ public class OptionalTest {
         Car car = new Car();
         Optional<Person> optPerson = Optional.ofNullable(person);
 
-        assertThat(car.getCarInsuranceName(optPerson)).isEqualTo("Unknown");
+        assertThat(car.getCarInsuranceName(optPerson, 23)).isEqualTo("Unknown");
     }
 }

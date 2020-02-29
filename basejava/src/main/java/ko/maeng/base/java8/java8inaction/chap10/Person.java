@@ -4,7 +4,12 @@ import java.util.*;
 
 public class Person {
     private Car car;
+    private int age;
     private Optional<Car> optCar;
+
+    public int getAge() {
+        return age;
+    }
 
     public Optional<Car> getCar() {
         return optCar;

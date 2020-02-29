@@ -74,4 +74,20 @@ Optional 클래스는 인스턴스에서 값을 얻을 수 있는 다양한 인�
 
 - ifPresent(Consumer<? super T> consumer)를 이용하면 값이 존재할 때 인수로 넘겨준 동작을 실행할 수 있다. 값이 없으면 아무일도 일어나지 않는다.
 
- 
+
+Optional 클래스의 메서드
+
+|메서드|설명|
+|------|---|
+|empty|빈 Optional 인스턴스 반환.|
+|filter|값이 존재하며 프레디케이트와 일치하면 값을 포함하는 Optional을 반환하고, 값이 없거나 프레디케이트와 일치하지 않으면 빈 Optional을 반환함.|
+|flatMap|값이 존재하면 인수로 제공된 함수를 적용한 결과 Optional을 반환하고, 값이 없으면 빈 Optional을 반환함.|
+|get|값이 존재하면 Optional이 감싸고 있는 값을 반환하고, 값이 없으면 NoSuchElementException이 발생함.|
+|ifPresent|값이 존재하면 지정된 Consumer를 실행하고, 값이 없으면 아무 일도 일어나지 않음.|
+|isPresent|값이 존재하면 true를 반환하고, 값이 없으면 false를 반환함.|
+|map|값이 존재하면 제공된 매핑 함수를 적용함.|
+|of|값이 존재하면 값을 감싸는 Optional을 반환하고, 값이 null이면 NullPointerException을 발생함.|
+|ofNullable|값이 존재하면 값을 감싸는 Optional을 반환하고, 값이 null이면 빈 Optional을 반환함.|
+|orElse|값이 존재하면 값을 감싸는 Optional을 반환하고, 값이 없으면 디폴트 값을 반환함.|
+|orElseGet|값이 존재하면 값을 감싸는 Optional을 반환하고, 값이 없으면 Supplier에서 제공하는 값을 반환함.|
+|orElseThrow|값이 존재하면 값을 감싸는 Optional을 반환하고, 값이 없으면 Supplier에서 생성한 예외를 발생함.|

@@ -10,8 +10,10 @@ public class Car {
         return insurance;
     }
 
-    public String getCarInsuranceName(Optional<Person> person) {
-        return person.flatMap(Person::getCar)
+    public String getCarInsuranceName(Optional<Person> person, int minAge) {
+        return person
+                .filter(p -> p.getAge() >= minAge)
+                .flatMap(Person::getCar)
                 .flatMap(Car::getInsurance)
                 .map(Insurance::getName)
                 .orElse("Unknown");
