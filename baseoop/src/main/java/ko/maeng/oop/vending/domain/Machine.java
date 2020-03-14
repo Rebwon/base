@@ -1,7 +1,7 @@
 package ko.maeng.oop.vending.domain;
 
 public class Machine {
-    private BeverageList beverages;
+    private BeverageList beverages = new BeverageList();
     private int price;
 
     public int getPrice() {
@@ -22,5 +22,13 @@ public class Machine {
 
     public Beverage findOne(Beverage beverage) {
         return beverages.get(beverage);
+    }
+
+    public void increase(Beverage beverage) {
+        beverages.increase(beverage);
+    }
+
+    public void decrease(Beverage beverage) {
+        beverages.decrease(beverage);
     }
 }
