@@ -1,5 +1,6 @@
 package oop;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ImmutableTest {
     @Test
-    public void final도_값변경이_가능하다() {
+    void final도_값변경이_가능하다() {
         // given
         final Map<String, Boolean> collection = new HashMap<>();
 
@@ -23,8 +24,9 @@ public class ImmutableTest {
         assertThat(collection.size()).isEqualTo(4);
     }
 
+    @Disabled
     @Test
-    public void final은_재할당이_불가능하다() {
+    void final은_재할당이_불가능하다() {
         // given
         final Map<String, Boolean> collection = new HashMap<>();
 
