@@ -1,4 +1,4 @@
 package ko.maeng.oop.vending.domain;
 
-public class Customer {
+public class VendingMachine {
 }
