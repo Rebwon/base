@@ -15,12 +15,16 @@ public class VendingMachine {
         return beverages;
     }
 
-    public String getTotalPrice() {
-        return totalPrice.toString();
+    public int getBeveragesSize() {
+        return beverages.getSize();
     }
 
-    public String getCustomerPrice() {
-        return customerPrice.toString();
+    public Money getTotalPrice() {
+        return totalPrice;
+    }
+
+    public Money getCustomerPrice() {
+        return customerPrice;
     }
 
     public void addBeverages(BeverageList beverageList) {
@@ -33,7 +37,7 @@ public class VendingMachine {
         this.customerPrice = customerPrice.minus(beverage.getPrice());
     }
 
-    public void addCustomerPrice(Money price) {
+    public void putCustomerPrice(Money price) {
         if(price.longValue() < 0) {
             throw new IllegalArgumentException("음수값의 돈을 넣을 수 없습니다.");
         }

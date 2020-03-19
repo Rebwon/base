@@ -21,9 +21,16 @@ public class Beverage {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Beverage beverage = (Beverage) o;
         return Objects.equals(beverageType.getName(), beverage.beverageType.getName()) &&
                 Objects.equals(price, beverage.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(beverageType, price);
     }
 
     @Override
