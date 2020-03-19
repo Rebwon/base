@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Beverage {
     private BeverageType beverageType;
-    private String price;
+    private Money price;
 
-    public Beverage(BeverageType beverageType, String price) {
+    public Beverage(BeverageType beverageType, Money price) {
         this.beverageType = beverageType;
         this.price = price;
     }
@@ -15,20 +15,15 @@ public class Beverage {
         return beverageType;
     }
 
-    public String getPrice() {
+    public Money getPrice() {
         return price;
     }
 
     @Override
     public boolean equals(Object o) {
         Beverage beverage = (Beverage) o;
-        return price.equals(beverage.price) &&
-                beverageType.getName().equals(beverage.beverageType.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(beverageType, price);
+        return Objects.equals(beverageType.getName(), beverage.beverageType.getName()) &&
+                Objects.equals(price, beverage.price);
     }
 
     @Override

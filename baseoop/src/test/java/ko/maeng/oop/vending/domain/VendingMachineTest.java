@@ -1,5 +1,6 @@
 package ko.maeng.oop.vending.domain;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,19 +15,24 @@ class VendingMachineTest {
     void setUp() {
         beverageList = new BeverageList();
         beverageList.addBeverages(asList(
-                new Beverage(COLA, "1500"),
-                new Beverage(SPRITE, "1000"),
-                new Beverage(LEMONADE, "2500"),
-                new Beverage(WATER, "800")
+                new Beverage(COLA, Money.wons(1500)),
+                new Beverage(SPRITE, Money.wons(1000)),
+                new Beverage(LEMONADE, Money.wons(2500)),
+                new Beverage(WATER, Money.wons(800))
         ));
+    }
+
+    @AfterEach
+    void tearDown() {
+        beverageList.clear();
     }
 
     @Test
     void getTotalPrice() {
         VendingMachine machine = new VendingMachine();
-        machine.addPrice("30000");
+        machine.addPrice(Money.wons(10000));
 
-        assertThat(machine.getTotalPrice()).isEqualTo("30000");
+        assertThat(machine.getTotalPrice()).isEqualTo("10000원");
     }
 
     @Test
@@ -34,18 +40,18 @@ class VendingMachineTest {
         VendingMachine machine = new VendingMachine();
         machine.addBeverages(beverageList);
 
-        assertThat(machine.getBeverages()).isNotNull();
+        assertThat(machine.getBeverages().getSize()).isEqualTo(4);
     }
 
     @Test
     void buyBeverage() {
         VendingMachine machine = new VendingMachine();
         machine.addBeverages(beverageList);
-        machine.addPrice("30000");
+        machine.addPrice(Money.wons(10000));
 
-        machine.buyBeverage(new Beverage(COLA, "1500"));
+        machine.buyBeverage(new Beverage(COLA, Money.wons(1500)));
 
-        assertThat(machine.getTotalPrice()).isEqualTo("31500");
-        System.out.println(machine.getBeverages().toString());
+        assertThat(machine.getTotalPrice()).isEqualTo("10000원");
+        assertThat(machine.getBeverages().getSize()).isEqualTo(3);
     }
 }

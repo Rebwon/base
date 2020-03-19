@@ -4,23 +4,23 @@ import ko.maeng.oop.vending.domain.exception.BeverageNotFoundException;
 
 public class VendingMachine {
     private BeverageList beverages;
-    private String totalPrice;
-    private String customerPrice;
+    private Money totalPrice = Money.ZERO;
+    private Money customerPrice = Money.ZERO;
 
-    public void addPrice(String price) {
-        this.totalPrice += price;
+    public void addPrice(Money price) {
+        this.totalPrice = this.totalPrice.plus(price);
     }
 
     public BeverageList getBeverages() {
         return beverages;
     }
 
-    public int getTotalPrice() {
-        return Integer.parseInt(this.totalPrice);
+    public String getTotalPrice() {
+        return totalPrice.toString();
     }
 
-    public int getCustomerPrice() {
-        return Integer.parseInt(this.customerPrice);
+    public String getCustomerPrice() {
+        return customerPrice.toString();
     }
 
     public void addBeverages(BeverageList beverageList) {
@@ -28,16 +28,15 @@ public class VendingMachine {
     }
 
     public void buyBeverage(Beverage beverage) {
-        if(beverages.isBeverage(beverage)) {
-            beverages.decrease(beverage);
-        }
-        throw new BeverageNotFoundException("음료 목록에 없는 음료입니다.");
+        if(!beverages.isBeverage(beverage)) throw new BeverageNotFoundException("음료 목록에 없는 음료입니다.");
+        beverages.decrease(beverage);
+        this.customerPrice = customerPrice.minus(beverage.getPrice());
     }
 
-    public void addCustomerPrice(String price) {
-        if(Integer.parseInt(price) < 0) {
+    public void addCustomerPrice(Money price) {
+        if(price.longValue() < 0) {
             throw new IllegalArgumentException("음수값의 돈을 넣을 수 없습니다.");
         }
-        this.customerPrice += price;
+        this.customerPrice = customerPrice.plus(price);
     }
 }

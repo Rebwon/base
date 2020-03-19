@@ -1,20 +1,20 @@
 package ko.maeng.oop.vending.domain;
 
 public class Customer {
-    private String price;
+    private Money price;
     private BeverageList beverageList;
 
-    public Customer(String price) {
+    public Customer(Money price) {
         this.price = price;
+        this.beverageList = new BeverageList();
     }
 
     public void buy(VendingMachine vendingMachine, Beverage beverage) {
-        beverageList = new BeverageList();
         vendingMachine.buyBeverage(beverage);
         beverageList.addBeverage(beverage);
     }
 
-    public void insertPrice(VendingMachine vendingMachine) {
-        vendingMachine.addCustomerPrice(this.price);
+    public void putPrice(VendingMachine vendingMachine) {
+        vendingMachine.addCustomerPrice(price);
     }
 }

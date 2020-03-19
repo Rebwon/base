@@ -18,41 +18,41 @@ class CustomerTest {
     void setUp() {
         beverageList = new BeverageList();
         beverageList.addBeverages(asList(
-                new Beverage(COLA, "1500"),
-                new Beverage(SPRITE, "1000"),
-                new Beverage(LEMONADE, "2500"),
-                new Beverage(WATER, "800")
+                new Beverage(COLA, Money.wons(1500)),
+                new Beverage(SPRITE, Money.wons(1000)),
+                new Beverage(LEMONADE, Money.wons(2500)),
+                new Beverage(WATER, Money.wons(800))
         ));
         vendingMachine = new VendingMachine();
-        vendingMachine.addPrice("30000");
+        vendingMachine.addPrice(Money.wons(10000));
         vendingMachine.addBeverages(beverageList);
     }
 
     @Test
     void buyBeverage() {
-        Customer customer = new Customer("5000");
-        customer.insertPrice(vendingMachine);
-        customer.buy(vendingMachine, new Beverage(COLA, "1500"));
+        Customer customer = new Customer(Money.wons(5000));
+        customer.putPrice(vendingMachine);
+        customer.buy(vendingMachine, new Beverage(COLA, Money.wons(1500)));
 
-        assertThat(vendingMachine.getCustomerPrice()).isEqualTo("3500");
+        assertThat(vendingMachine.getCustomerPrice()).isEqualTo("3500원");
         assertThat(vendingMachine.getBeverages().getSize()).isEqualTo(3);
     }
 
     @Test
     void doNotInsertMinusPrice() {
-        Customer customer = new Customer("-5000");
+        Customer customer = new Customer(Money.wons(-1500));
         assertThrows(IllegalArgumentException.class, () -> {
-            customer.insertPrice(vendingMachine);
+            customer.putPrice(vendingMachine);
         });
     }
 
     @Test
     void doNotNonBeverageSelect() {
-        Customer customer = new Customer("5000");
-        customer.insertPrice(vendingMachine);
+        Customer customer = new Customer(Money.wons(5000));
+        customer.putPrice(vendingMachine);
 
         assertThrows(BeverageNotFoundException.class, () -> {
-            customer.buy(vendingMachine, new Beverage(COLA, "2000"));
+            customer.buy(vendingMachine, new Beverage(COLA, Money.wons(2000)));
         });
     }
 }
