@@ -1,5 +1,6 @@
 package ko.maeng.oop.dddstart.domain.order;
 
+import ko.maeng.oop.dddstart.domain.object.IdentifyNo;
 import ko.maeng.oop.dddstart.domain.object.Money;
 import ko.maeng.oop.dddstart.domain.order.shipping.ShippingInfo;
 import ko.maeng.oop.dddstart.domain.user.Customer;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class Order {
     private Customer customer;
-    private OrderNo id;
+    private IdentifyNo id;
     private Money totalAmounts;
     private List<OrderLine> orderLines;
     private OrderState state;
@@ -16,7 +17,7 @@ public class Order {
     private ShippingInfo shippingInfo;
 
     public Order(List<OrderLine> orderLines, ShippingInfo shippingInfo, OrderState state, Customer customer) {
-        this.id = new OrderNo();
+        this.id = new IdentifyNo();
         setOrderLines(orderLines);
         setShippingInfo(shippingInfo);
         setCustomer(customer);
@@ -24,6 +25,7 @@ public class Order {
     }
 
     public void changeShipped() {
+        verifyNotYetShipped();
         this.state = OrderState.SHIPPED;
     }
 

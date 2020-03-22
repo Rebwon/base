@@ -1,12 +1,12 @@
-package ko.maeng.oop.dddstart.domain.user;
+package ko.maeng.oop.dddstart.domain.object;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class UserNo {
+public class IdentifyNo {
     private UUID id;
 
-    public UserNo() {
+    public IdentifyNo() {
         this.id = UUID.randomUUID();
     }
 
@@ -18,8 +18,8 @@ public class UserNo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserNo userNo = (UserNo) o;
-        return Objects.equals(id, userNo.id);
+        IdentifyNo that = (IdentifyNo) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class UserNo {
 
     @Override
     public String toString() {
-        return "UserNo{" +
+        return "IdentifyNo{" +
                 "id=" + id +
                 '}';
     }
