@@ -16,8 +16,8 @@ public class Order {
     private DeliveryStatus status;
     private ShippingInfo shippingInfo;
 
-    public Order(List<OrderLine> orderLines, ShippingInfo shippingInfo, OrderState state, Customer customer) {
-        this.id = new IdentifyNo();
+    public Order(IdentifyNo id, List<OrderLine> orderLines, ShippingInfo shippingInfo, OrderState state, Customer customer) {
+        this.id = id;
         setOrderLines(orderLines);
         setShippingInfo(shippingInfo);
         setCustomer(customer);
@@ -37,6 +37,34 @@ public class Order {
     public void cancel() {
         verifyNotYetShipped();
         this.state = OrderState.CANCELED;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public IdentifyNo getId() {
+        return id;
+    }
+
+    public Money getTotalAmounts() {
+        return totalAmounts;
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public OrderState getState() {
+        return state;
+    }
+
+    public DeliveryStatus getStatus() {
+        return status;
+    }
+
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
     }
 
     private void setCustomer(Customer customer) {
