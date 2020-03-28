@@ -2,28 +2,21 @@ package ko.maeng.oop.dddstart.domain.order;
 
 import ko.maeng.oop.dddstart.domain.object.IdentifyNo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OrderRepository {
-    private final List<Order> orders = new ArrayList<>();
+	private final Map<UUID, Order> data = new ConcurrentHashMap<>();
 
-    public Order save(Order order){
-        if(order == null) {
-            throw new IllegalArgumentException("No Order");
-        }
-        orders.add(order);
-        return order;
-    }
+	public Order save(Order order) {
+		data.putIfAbsent(Objects.requireNonNull(order.getId().getId()), order);
+		return order;
+	}
 
-    public Optional<Order> findById(IdentifyNo id) {
-        return orders.stream()
-                .filter(o -> o.getId().equals(id))
-                .findFirst();
-    }
-
-    public void delete(IdentifyNo id) {
-        orders.removeIf(order -> order.getId().equals(id));
-    }
+	public Optional<Order> findById(IdentifyNo id) {
+		return data.values().stream().filter(it -> Objects.equals(it.getId(), id)).findFirst();
+	}
 }
