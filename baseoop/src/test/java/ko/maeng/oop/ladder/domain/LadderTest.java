@@ -30,7 +30,7 @@ class LadderTest {
 		for(int i=0; i<rows.length; i++) {
 			rows[i] = new Row(new NatualNumber(3));
 		}
-		String result = Ladder.generate(rows, new NatualNumber(1), new NatualNumber(1));
+		String result = Ladder.generate(rows, Position.create(1, 1));
 		assertEquals("0* 0 0 \n0 0 0 \n0 0 0 \n", result);
 	}
 
@@ -41,7 +41,7 @@ class LadderTest {
 			rows[i] = new Row(new NatualNumber(3));
 		}
 		rows[0].drawLine(new NatualNumber(1));
-		String result = Ladder.generate(rows, new NatualNumber(1), new NatualNumber(1));
+		String result = Ladder.generate(rows, Position.create(1, 1));
 		assertEquals("1* -1 0 \n0 0 0 \n0 0 0 \n", result);
 	}
 }

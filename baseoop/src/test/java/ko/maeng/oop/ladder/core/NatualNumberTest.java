@@ -22,4 +22,10 @@ class NatualNumberTest {
 		NatualNumber number = new NatualNumber(3);
 		assertEquals(2, number.toArrayIndex());
 	}
+
+	@Test
+	void createFromArrayIndex() {
+		NatualNumber natualNumber = NatualNumber.createFromArrayIndex(1);
+		assertEquals(new NatualNumber(2), natualNumber);
+	}
 }

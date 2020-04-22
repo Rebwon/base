@@ -3,13 +3,18 @@ package ko.maeng.oop.ladder.core;
 import java.util.Objects;
 
 public class NatualNumber {
+	private static final int INTERVAL = 1;
 	private int number;
 
 	public NatualNumber(int number) {
-		if(number < 1) {
+		if(number < INTERVAL) {
 			throw new IllegalArgumentException();
 		}
 		this.number = number;
+	}
+
+	public static NatualNumber createFromArrayIndex(int index) {
+		return new NatualNumber(index + INTERVAL);
 	}
 
 	public int getNumber() {
@@ -17,7 +22,7 @@ public class NatualNumber {
 	}
 
 	public int toArrayIndex() {
-		return number - 1;
+		return number - INTERVAL;
 	}
 
 	@Override
