@@ -4,9 +4,13 @@ import java.util.Objects;
 
 public class Node {
 	private enum Direction {
-		LEFT,
-		CENTER,
-		RIGHT
+		LEFT(-1), CENTER(0), RIGHT(1);
+
+		private int symbol;
+
+		Direction(int symbol) {
+			this.symbol = symbol;
+		}
 	}
 
 	private Direction direction;
@@ -51,6 +55,10 @@ public class Node {
 
 	static Node createLeftNode() {
 		return new Node(Direction.LEFT);
+	}
+
+	void appendSymbol(StringBuilder sb) {
+		sb.append(direction.symbol);
 	}
 
 	@Override
