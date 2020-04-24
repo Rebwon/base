@@ -25,6 +25,10 @@ public class NatualNumber {
 		return number - INTERVAL;
 	}
 
+	public NatualNumber multiply(NatualNumber operand) {
+		return new NatualNumber(this.number * operand.number);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -38,5 +42,12 @@ public class NatualNumber {
 	@Override
 	public int hashCode() {
 		return Objects.hash(number);
+	}
+
+	@Override
+	public String toString() {
+		return "NatualNumber{" +
+			"number=" + number +
+			'}';
 	}
 }

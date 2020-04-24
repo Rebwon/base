@@ -28,4 +28,11 @@ class NatualNumberTest {
 		NatualNumber natualNumber = NatualNumber.createFromArrayIndex(1);
 		assertEquals(new NatualNumber(2), natualNumber);
 	}
+
+	@Test
+	void multiply() {
+		NatualNumber natualNumber = new NatualNumber(2);
+		NatualNumber actual = natualNumber.multiply(new NatualNumber(3));
+		assertEquals(new NatualNumber(6), actual);
+	}
 }
