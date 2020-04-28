@@ -21,6 +21,15 @@ public class RandomLadderCreator {
 		}
 	}
 
+	public static boolean isExisted(NatualNumber[] startPositions, NatualNumber randomPosition) {
+		for(NatualNumber each : startPositions) {
+			if(randomPosition.equals(each)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void drawLine(NatualNumber height, NatualNumber startPosition) {
 		if(isOverHeight(height)) {
 			throw new IllegalArgumentException();
@@ -58,10 +67,33 @@ public class RandomLadderCreator {
 		NatualNumber totalPositions = ladderSize.getTotalPosition();
 		int countOfLine = ladderSize.getCountOfLine(DEFAULT_LINE_RATIO);
 		NatualNumber[] startPositions = new NatualNumber[countOfLine];
-		for (int i = 0; i < startPositions.length; i++) {
-			startPositions[i] = randInt(1, totalPositions.getNumber());
-			System.out.println(String.format("random position : %s", startPositions[i]));
-		}
+
+		int i = 0;
+		do {
+			NatualNumber randomPosition = randInt(1, totalPositions.getNumber());
+			if(ladderSize.isMultipleOfPerson(randomPosition)) {
+				continue;
+			}
+			if(isExisted(startPositions, randomPosition)) {
+				continue;
+			}
+			if(isExisted(startPositions, new NatualNumber(randomPosition.getNumber() + 1))) {
+				continue;
+			}
+			if(randomPosition.equals(new NatualNumber(1))) {
+				startPositions[i] = randomPosition;
+				System.out.println(String.format("random position : %s", startPositions[i]));
+				i++;
+			} else {
+				if(isExisted(startPositions, new NatualNumber(randomPosition.toArrayIndex()))) {
+					continue;
+				}
+				startPositions[i] = randomPosition;
+				System.out.println(String.format("random position : %s", startPositions[i]));
+				i++;
+			}
+		} while(i < countOfLine);
+
 		return startPositions;
 	}
 }
