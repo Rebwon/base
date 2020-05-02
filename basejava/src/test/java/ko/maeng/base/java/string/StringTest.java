@@ -198,4 +198,39 @@ public class StringTest {
         value = "indexOf indexOf";
         assertThat(value.indexOf("i", 1)).isEqualTo(8);
     }
+
+    @Test
+    public void lastIndexOf() {
+        // lastIndexOf(String) return int
+        String value = "last";
+        assertThat(value.lastIndexOf('s')).isEqualTo(2);
+        assertThat(value.lastIndexOf('t')).isEqualTo(3);
+        assertThat(value.lastIndexOf('a')).isEqualTo(1);
+    }
+
+    @Test
+    public void subString() {
+        // subString(int start, int end)
+        // 문자열을 자른다. start포인트 부터 end포인트 바로 전까지
+        String val = "subStrings";
+        assertThat(val.substring(1, 3)).isEqualTo("ub");
+    }
+
+    @Test
+    public void concat() {
+        // concat(String str)
+        // 문자열 뒤에 새로운 문자열을 이어 붙인다.
+        // concat은 new String으로 새로운 문자열 객체를 생성하고 이전 객체는
+        // 가비지 컬렉션 대상이 된다.
+        String val = "concat";
+        assertThat(val.concat("Values")).isEqualTo("concatValues");
+    }
+
+    @Test
+    public void replace() {
+        // replace(char oldchar, char newchar)
+        // oldchar를 newchar로 변환한다.
+        String val = "replace";
+        assertThat(val.replace('e', 'c')).isEqualTo("rcplacc");
+    }
 }
