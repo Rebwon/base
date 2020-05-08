@@ -13,12 +13,12 @@ Tell dot't ask (묻지 말고 시켜라)
 - 임시 변수의 get 호출이 많음
 
 연속된 get 메서드 호출은 아래와 같은 모양을 갖는다.
-```java
+```
 value = someObject.getA().getB().getValue();
 ```
 
 두 번째는 임시 변수에 할당된 객체의 get을 호출하는 코드가 많은 경우이다. 이는 사실상 첫번째 증상과 동일하지만, 코드가 흩어져 있을 경우 발견하기 어렵다.
-```java
+```
 A a = someObject.getA();
 B b = a.getB();
 value = b.getValue();
@@ -31,3 +31,68 @@ value = b.getValue();
    - 기능은 최대한 캡슐화해서 구현한다.
 2. 객체 간에 어떻게 메세지를 주고받을 지 결정한다.
 3. 과정1과 과정2를 개발하는 동안 지속적으로 반복한다.
+
+### 다형성과 추상화
+
+```java
+public class FlowController {
+    private boolean useFile;
+    
+    public FlowController(boolean useFile){
+        this.useFile = useFile;
+    }
+    public void process() {
+    	ByteSource source = null;
+        if(useFile)
+            source = new FileDataReader();
+        else
+            source = new SocketDataReader();
+        byte[] data = source.read();
+    }
+}
+```
+
+위와 같은 클래스에서 데이터를 읽는 클래스가 추가되어도 FlowController가 바뀌지 않도록 하는 방법에는 다음 두 가지가 존재한다.
+
+- ByteSource 타입의 객체를 생성하는 기능을 별도의 객체로 분리한 뒤, 그 객체를 사용해서 ByteSource를 생성
+- 생성자(또는 다른 메서드)를 이용해서 사용할 ByteSource 전달받기
+
+이 중 첫번째 방법을 사용해보자.
+
+```java
+public class ByteSourceFactory{
+    public ByteSource create() {
+        if(useFile)
+        	return new FileDataReader();
+        else
+        	return new SocketDataReader();
+    }
+
+    private boolean useFile() {
+        String useFileVal = System.getProperty("useFile");
+        return useFileVal != null && Boolean.valueOf(useFileVal);
+    }
+    
+    // 싱글톤 패턴 적용
+    private static ByteSourceFactory instance = new ByteSourceFactory();
+
+    public static ByteSourceFactory getInstance() {
+        return instance;
+    }
+
+    private ByteSourceFactory() {}
+}
+```
+
+위 클래스를 적용한 코드는 다음과 같다.
+
+```java
+public class FlowController {
+    public void process() {
+    	ByteSource source = ByteSourceFactory.getInstance().create();
+        byte[] data = source.read();
+    }
+}
+```
+
+이제 새로운 요구사항이 반영되어도 수정할 부분은 ByteSourceFactory 뿐이다.
