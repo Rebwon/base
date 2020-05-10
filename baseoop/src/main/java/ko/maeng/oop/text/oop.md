@@ -335,3 +335,53 @@ public void increaseHeight(Rectangle rtc) {
 필요한 하위 기능의 실제 구현으로 정의할 수 있다. 
 
 고수준 모듈은 상대적으로 큰 틀에서 프로그램을 다룬다면, 저수준 모듈은 각 개별 요소가 어떻게 구현될 지에 대해서 다룬다. 
+
+### DI와 Service Locator
+
+서비스 로케이터는 필요한 객체를 서비스 로케이터 객체를 만들어서 그 객체에서 제공하는 것이다.
+
+생성자 주입 방식의 DI를 활용한 의존 객체 주입
+
+```java
+public class Main{
+    public static void main(String[] args){
+        // 상위 수준인 transcoder 패키지에서 사용할
+        // 하위 수준의 모듈 객체 생성
+        JobQueue jobQueue = new FileJobQueues();
+        Transcoder transcoder = new FfmpegTranscoder();
+        
+        // 상위 수준 모듈 객체를 생성하고 실행
+        final Worker worker = new Worker(jobQueue, transcoder);
+    }
+}
+```
+
+위와 같은 방식에서 나아가 조립기로 분리하여 DI를 할 수 있다.
+
+```java
+public class Assembler {
+    public void createAndWire() {
+        JobQueue jobQueue = new FileJobQueues();
+        Transcoder transcoder = new FfmpegTranscoder();
+        this.worker = new Worker(jobQueue, transcoder);
+    }
+
+    public Worker getWorker() {
+        return this.worker;
+    }
+}
+```
+
+이제 Main 클래스는 Assembler에게 객체 생성과 조립 책임을 위임한 뒤에 생성한 Worker객체를 구하는 방식으로 변경된다.
+
+```java
+public class Main{
+    public static void main(String[] args){
+        Assembler assembler = new Assembler();
+        assembler.createAndWire();
+        final Worker worker = assembler.getWorker();
+    }
+}
+```
+
+스프링 프레임워크의 DI 프레임워크가 바로 객체를 생성하고 조립해주는 기능을 담당한다.
