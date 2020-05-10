@@ -385,3 +385,117 @@ public class Main{
 ```
 
 스프링 프레임워크의 DI 프레임워크가 바로 객체를 생성하고 조립해주는 기능을 담당한다.
+
+생성자 등록 방식의 서비스 로케이터 구현
+
+- 서비스 로케이터를 생성할 때 사용할 객체를 전달한다.
+- 서비스 로케이터 인스턴스를 지정하고 참조하기 위한 static 메서드를 제공한다.
+
+위 방식을 따라 만든 서비스 로케이터 구현의 예이다.
+```java
+public class ServiceLocator {
+    private JobQueue jobQueue;
+    private Transcoder transcoder;
+    
+    public ServiceLocator(JobQueue jobQueue, Transcoder transcoder) {
+        this.jobQueue = jobQueue;
+        this.transcoder = transcoder;
+    }
+
+    // Getter
+    
+    // 서비스 로케이터 접근을 위한 static 메서드
+    private static ServiceLocator instance;
+    public static void load(ServiceLocator locator) {
+        ServiceLocator.instance = locator;
+    }
+    public static ServiceLocator getInstance() {
+        return instance;
+    }
+}
+```
+
+아래는 메인 영역에서 사용 예이다.
+
+```java
+public class Main{
+    public static void main(String[] args){
+        // 의존 객체 생성
+        JobQueue jobQueue = new FileJobQueues();
+        Transcoder transcoder = new FfmpegTranscoder();
+        
+        // 서비스 로케이터 초기화
+        ServiceLocator serviceLocator = new ServiceLocator(jobQueue, transcoder);
+        ServiceLocator.load(serviceLocator);
+
+        // 애플리케이션 코드 실행
+        final Worker worker = new Worker();
+    }
+}
+```
+
+생성자 등록 방식 이외에도 Setter를 활용한 방식, 상속을 활용한 방식으로 구현이 가능하다.
+
+상속을 통한 서비스 로케이터 구현
+
+- 객체를 구하는 추상 메서드를 제공하는 상위 타입 구현
+- 상위 타입을 상속받은 하위 타입에서 사용할 객체 설정
+
+아래와 같이 상위 타입을 구현한다.
+```java
+public abstract class ServiceLocator{
+    public abstract JobQueue getJobQueue();
+    public abstract Transcoder getTranscoder();
+
+    protected ServiceLocator() {
+        if(ServiceLocator.instance != null)
+            throw new IllegalStateException("이미 초기화됨."); 
+        ServiceLocator.instance = this;
+    }
+    
+    private static ServiceLocator instance;
+    public static ServiceLocator getInstance() {
+    	return instance;
+    }
+}
+```
+
+추상 클래스를 구현한 구현체는 아래와 같다.
+```java
+public class MyServiceLocator extends ServiceLocator {
+    private FileJobQueue jobQueue;
+    private FfmpegTranscoder transcoder;
+
+    public MyServiceLocator() {
+        super();
+        this.jobQueue = new FileJobQueue();
+        this.transcoder = new FfmpegTranscoder();
+    }
+     
+    @Override
+    public JobQueue getJobQueue() {
+        return jobQueue;
+    }
+
+    @Override
+    public Transcoder getTranscoder() {
+        return transcoder;
+    }
+}
+```
+
+아래는 간단한 사용 예이다.
+
+```java
+public class Main{
+    public static void main(String[] args){
+        // 서비스 로케이터 초기화
+        // 이 코드를 사용하면 추상 클래스인 ServiceLocator의 생성자가 호출이 되며
+        // MyServiceLocator 구현체로 등록이 된다.
+        new MyServiceLocator();
+
+        // 애플리케이션 코드 실행
+        final Worker worker = new Worker();
+    }
+}
+```
