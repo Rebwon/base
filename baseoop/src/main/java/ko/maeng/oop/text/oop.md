@@ -386,7 +386,7 @@ public class Main{
 
 스프링 프레임워크의 DI 프레임워크가 바로 객체를 생성하고 조립해주는 기능을 담당한다.
 
-생성자 등록 방식의 서비스 로케이터 구현
+### 생성자 등록 방식의 서비스 로케이터 구현
 
 - 서비스 로케이터를 생성할 때 사용할 객체를 전달한다.
 - 서비스 로케이터 인스턴스를 지정하고 참조하기 위한 static 메서드를 제공한다.
@@ -434,9 +434,9 @@ public class Main{
 }
 ```
 
-생성자 등록 방식 이외에도 Setter를 활용한 방식, 상속을 활용한 방식으로 구현이 가능하다.
+생성자 등록 방식 이외에도 Setter를 활용한 방식, 상속을 활용한 방식, 제네릭/템플릿으로 구현이 가능하다.
 
-상속을 통한 서비스 로케이터 구현
+### 상속을 통한 서비스 로케이터 구현
 
 - 객체를 구하는 추상 메서드를 제공하는 상위 타입 구현
 - 상위 타입을 상속받은 하위 타입에서 사용할 객체 설정
@@ -499,3 +499,41 @@ public class Main{
     }
 }
 ```
+
+### 제네릭/템플릿을 이용한 서비스 로케이터 구현
+
+서비스 로케이터의 단점은 인터페이스 분리 원칙을 위반한다는 점이다.
+
+이러한 문제를 보완하기 위해 제네릭 기반의 객체 등록 방식을 구현한 예는 아래와 같다.
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class ServiceLocator {
+    private static Map<Class<?>, Object> objectMap = 
+            new HashMap<>();
+    
+    public static <T> T get(Class<T> klass) {
+        return (T) objectMap.get(klass);
+    }
+    
+    public static void register(Class<T> klass, Object obj) {
+    	objectMap.put(klass, obj);
+    }
+}
+```
+
+아래는 사용 예이다.
+
+```
+public static void main(String[] args){
+    ServiceLocator.register(JobQueue.class, new FileJobQueue);
+    ServiceLocator.register(Transcoder.class, new FfmpegTranscoder());
+
+    Service Locator를 사용하는 코드는 아래와 같이 사용한다.
+    JobQueue jobQueue = ServiceLocator.get(JobQueue.class);
+}
+```
+
+서비스 로케이터의 가장 큰 단점은 동일 타입의 객체가 다수 필요할 경우, 각 객체 별로 제공 메서드를 만들어주어야 한다는 점이다.
