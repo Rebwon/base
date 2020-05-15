@@ -89,3 +89,11 @@ public class StatusChecker extends StatusSubject {
 
 StatusChecker 클래스는 비정상 상태가 감지되면 상위 클래스의 notifyStatus()를 호출해서
 등록된 옵저버 객체들에 상태 값을 전달한다.
+
+### 옵저버 패턴 구현의 고려 사항
+
+- 주제 객체의 통지 기능 실행 주체
+- 옵저버 인터페이스의 분리
+- 통지 시점에서의 주제 객체 상태
+- 옵저버 객체의 실행 제약 조건
+
