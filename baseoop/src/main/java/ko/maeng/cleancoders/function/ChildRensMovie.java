@@ -2,7 +2,7 @@ package ko.maeng.cleancoders.function;
 
 public class ChildRensMovie extends Movie {
 	public ChildRensMovie(String title) {
-		super(title, Movie.CHILDRENS);
+		super(title);
 	}
 
 	@Override
