@@ -11,10 +11,6 @@ public class Beverage {
         this.price = price;
     }
 
-    public BeverageType getBeverageType() {
-        return beverageType;
-    }
-
     public Money getPrice() {
         return price;
     }
