@@ -17,7 +17,10 @@ public class ExpenseReport {
         for (Expense expense : expenses) {
             if (expense.type == BREAKFAST || expense.type == DINNER)
                 mealExpenses += expense.amount;
+            total += expense.amount;
+        }
 
+        for(Expense expense : expenses) {
             String name = "TILT";
             switch (expense.type) {
                 case DINNER:
@@ -35,8 +38,6 @@ public class ExpenseReport {
                     ((expense.type == DINNER && expense.amount > 5000)
                             || (expense.type == BREAKFAST && expense.amount > 1000)) ? "X" : " ",
                     name, penniesToDollars(amount)));
-
-            total += expense.amount;
         }
 
         printTotals(printer, total, mealExpenses);
