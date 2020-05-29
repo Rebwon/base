@@ -2,7 +2,7 @@ package ko.maeng.cleancoders.ocp;
 
 public class ExpenseReporter {
     private final ExtractReport extractReport = new ExtractReport();
-    private final ExpenseNamer expenseNamer = new ExpenseNamer();
+    private final ExpenseNamer expenseNamer = new ExpenseReportNamer();
     private ReportPrinter printer;
 
     public ExpenseReporter() {
