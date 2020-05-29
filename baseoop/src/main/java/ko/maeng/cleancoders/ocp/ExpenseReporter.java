@@ -24,18 +24,6 @@ public class ExpenseReporter {
         printTotals();
     }
 
-    private void totalUpExpenses() {
-        extractReport.totalUpExpenses();
-    }
-
-    private void addTotals(Expense expense) {
-        extractReport.addTotals(expense);
-    }
-
-    private boolean isMeal(Expense expense) {
-        return extractReport.isMeal(expense);
-    }
-
     private void printExpenses() {
         for(Expense expense : extractReport.expenses)
             printExpense(expense);
