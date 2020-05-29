@@ -1,6 +1,5 @@
 package ko.maeng.cleancoders.ocp;
 
-import static ko.maeng.cleancoders.ocp.Expense.Type.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
