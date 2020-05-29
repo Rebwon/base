@@ -2,23 +2,18 @@ package ko.maeng.cleancoders.ocp;
 
 import static ko.maeng.cleancoders.ocp.Expense.Type.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ExpenseReport {
-    private List<Expense> expenses = new ArrayList<>();
-    private int total;
-    private int mealExpenses;
+public class ExpenseReporter {
+    private final ExtractReport extractReport = new ExtractReport();
     private ReportPrinter printer;
 
-    public ExpenseReport() {
-        total = 0;
-        mealExpenses = 0;
+    public ExpenseReporter() {
+        extractReport.total = 0;
+        extractReport.mealExpenses = 0;
     }
 
     public void printReport(ReportPrinter printer) {
         this.printer = printer;
-        totalUpExpenses();
+        extractReport.totalUpExpenses();
 
         printExpensesAndTotals();
     }
@@ -30,22 +25,19 @@ public class ExpenseReport {
     }
 
     private void totalUpExpenses() {
-        for (Expense expense : expenses)
-            addTotals(expense);
+        extractReport.totalUpExpenses();
     }
 
     private void addTotals(Expense expense) {
-        if (isMeal(expense))
-            mealExpenses += expense.amount;
-        total += expense.amount;
+        extractReport.addTotals(expense);
     }
 
     private boolean isMeal(Expense expense) {
-        return expense.type == BREAKFAST || expense.type == DINNER;
+        return extractReport.isMeal(expense);
     }
 
     private void printExpenses() {
-        for(Expense expense : expenses)
+        for(Expense expense : extractReport.expenses)
             printExpense(expense);
     }
 
@@ -77,8 +69,8 @@ public class ExpenseReport {
     }
 
     private void printTotals() {
-        printer.print(String.format("\nMeal expenses $%.02f", penniesToDollars(mealExpenses)));
-        printer.print(String.format("\nTotal $%.02f", penniesToDollars(total)));
+        printer.print(String.format("\nMeal expenses $%.02f", penniesToDollars(extractReport.mealExpenses)));
+        printer.print(String.format("\nTotal $%.02f", penniesToDollars(extractReport.total)));
     }
 
     private void printHeader() {
@@ -90,7 +82,7 @@ public class ExpenseReport {
     }
 
     public void addExpense(Expense expense) {
-        expenses.add(expense);
+        extractReport.addExpense(expense);
     }
 
     private String getDate() {
