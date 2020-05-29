@@ -1,7 +1,5 @@
 package ko.maeng.cleancoders.ocp;
 
-import static ko.maeng.cleancoders.ocp.Expense.Type.*;
-
 public class DinnerExpense extends Expense {
 	public DinnerExpense(int amount) {
 		super(Type.DINNER, amount);
@@ -9,12 +7,11 @@ public class DinnerExpense extends Expense {
 
 	@Override
 	boolean isMeal() {
-		return type == BREAKFAST || type == DINNER;
+		return true;
 	}
 
 	@Override
 	boolean isOverage() {
-		return (type == DINNER && amount > 5000)
-			|| (type == BREAKFAST && amount > 1000);
+		return amount > 5000;
 	}
 }
