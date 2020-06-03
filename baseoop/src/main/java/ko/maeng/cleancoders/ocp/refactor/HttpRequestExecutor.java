@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Set;
@@ -17,34 +18,60 @@ public class HttpRequestExecutor {
 	private static final String inputEncoding = "UTF-8";
 	private static final String outputEncoding = "UTF-8";
 	private HttpURLConnection urlConnection;
+	private Boolean isGet;
 
 	public ResponseModel handleRequest(Boolean isGet, String requestURI, Map<String, String> params) throws IOException {
+		this.isGet = isGet;
 		String paramsString = getParamsString(params);
 
+		URL url = createUrl(isGet, requestURI, paramsString);
+		setDefaultConnectionSettings(url);
+
+		if(isPOST()) {
+			setPOSTConnectionSettings();
+			writePOSTParameters(paramsString);
+		}
+		String responseBody = getResponseBody();
+
+		urlConnection.disconnect();
+
+		return new ResponseModel(requestURI, responseBody);
+	}
+
+	private String getResponseBody() throws IOException {
+		InputStream inputStream = urlConnection.getInputStream();
+		return convertInputStreamToString(inputStream);
+	}
+
+	private void writePOSTParameters(String paramsString) throws IOException {
+		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(urlConnection.getOutputStream());
+		bufferedOutputStream.write(paramsString.getBytes(outputEncoding));
+		bufferedOutputStream.flush();
+		bufferedOutputStream.close();
+	}
+
+	private void setPOSTConnectionSettings() {
+		urlConnection.setDoOutput(true);
+		urlConnection.setChunkedStreamingMode(0);
+	}
+
+	private boolean isPOST() {
+		return !isGet;
+	}
+
+	private void setDefaultConnectionSettings(URL url) throws IOException {
+		urlConnection = (HttpURLConnection) url.openConnection();
+		urlConnection.setReadTimeout(DEFAULT_SOCKET_TIMEOUT_SEC);
+		urlConnection.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_SEC);
+	}
+
+	private URL createUrl(Boolean isGet, String requestURI, String paramsString) throws MalformedURLException {
 		URL url = null;
 		if(isGet)
 			url = new URL(requestURI + paramsString);
 		else
 			url = new URL(requestURI);
-		urlConnection = (HttpURLConnection) url.openConnection();
-		urlConnection.setReadTimeout(DEFAULT_SOCKET_TIMEOUT_SEC);
-		urlConnection.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_SEC);
-
-		if(!isGet) {
-			urlConnection.setDoOutput(true);
-			urlConnection.setChunkedStreamingMode(0);
-
-			BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(urlConnection.getOutputStream());
-			bufferedOutputStream.write(paramsString.getBytes(outputEncoding));
-			bufferedOutputStream.flush();
-			bufferedOutputStream.close();
-		}
-		InputStream inputStream = urlConnection.getInputStream();
-		String responseBody = convertInputStreamToString(inputStream);
-
-		urlConnection.disconnect();
-
-		return new ResponseModel(requestURI, responseBody);
+		return url;
 	}
 
 	private String getParamsString(Map<String, String> params) {
