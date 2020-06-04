@@ -8,22 +8,40 @@ import java.util.regex.Pattern;
 public abstract class SymbolReplacer {
 	protected String stringToReplace;
 	protected List<String> alreadyReplaced = new ArrayList<>();
+	private final Pattern symbolPattern = Pattern.compile("\\$([a-zA-Z]\\w*)");
+	private Matcher symbolMatcher;
 
 	public SymbolReplacer(String s) {
 		this.stringToReplace = s;
+		this.symbolMatcher = symbolPattern.matcher(stringToReplace);
 	}
 
 	public String replace() {
-		Pattern symbolPattern = Pattern.compile("\\$([a-zA-Z]\\w*)");
-		Matcher symbolMatcher = symbolPattern.matcher(stringToReplace);
-		while(symbolMatcher.find()) {
-			String symbolName = symbolMatcher.group(1);
-			if (getSymbol(symbolName) != null && !alreadyReplaced.contains(symbolName)) {
-				alreadyReplaced.add(symbolName);
-				stringToReplace = stringToReplace.replace("$" + symbolName, getSymbol(symbolName));
-			}
+		for (String symbolName = nextSymbol();
+			symbolName != null;
+			symbolName = nextSymbol()
+		) {
+			replaceAllInstances(symbolName);
 		}
 		return stringToReplace;
+	}
+
+	private String nextSymbol() {
+		return symbolMatcher.find() ? symbolMatcher.group(1) : null;
+	}
+
+	private void replaceAllInstances(String symbolName) {
+		if (shouldReplaceSymbol(symbolName))
+			replaceSymbol(symbolName);
+	}
+
+	private void replaceSymbol(String symbolName) {
+		alreadyReplaced.add(symbolName);
+		stringToReplace = stringToReplace.replace("$" + symbolName, getSymbol(symbolName));
+	}
+
+	private boolean shouldReplaceSymbol(String symbolName) {
+		return getSymbol(symbolName) != null && !alreadyReplaced.contains(symbolName);
 	}
 
 	abstract protected String getSymbol(String symbolName);
