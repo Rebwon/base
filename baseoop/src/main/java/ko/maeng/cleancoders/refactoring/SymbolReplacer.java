@@ -2,34 +2,27 @@ package ko.maeng.cleancoders.refactoring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SymbolReplacer {
 	protected String stringToReplace;
 	protected List<String> alreadyReplaced = new ArrayList<>();
-	private final Pattern symbolPattern = Pattern.compile("\\$([a-zA-Z]\\w*)");
-	private Matcher symbolMatcher;
 	private SymbolTranslator symbolTranslator;
+	private SymbolIterator symbolIterator;
 
 	public SymbolReplacer(String s, SymbolTranslator symbolTranslator) {
 		this.stringToReplace = s;
-		this.symbolMatcher = symbolPattern.matcher(stringToReplace);
 		this.symbolTranslator = symbolTranslator;
+		this.symbolIterator = new SymbolIterator(s);
 	}
 
 	public String replace() {
-		for (String symbolName = nextSymbol();
-			symbolName != null;
-			symbolName = nextSymbol()
+		for (String symbolName = symbolIterator.nextSymbol();
+			 symbolName != null;
+			 symbolName = symbolIterator.nextSymbol()
 		) {
 			replaceAllInstances(symbolName);
 		}
 		return stringToReplace;
-	}
-
-	private String nextSymbol() {
-		return symbolMatcher.find() ? symbolMatcher.group(1) : null;
 	}
 
 	private void replaceAllInstances(String symbolName) {
