@@ -1,6 +1,5 @@
 package ko.maeng.cleancoders.ocp.refactor;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -12,25 +11,21 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Set;
 
-public class HttpRequestExecutor {
+public abstract class HttpRequestExecutor {
 	public static final int DEFAULT_CONNECT_TIMEOUT_SEC = 10000;
 	public static final int DEFAULT_SOCKET_TIMEOUT_SEC = 30000;
 	private static final String inputEncoding = "UTF-8";
-	private static final String outputEncoding = "UTF-8";
-	private HttpURLConnection urlConnection;
-	private Boolean isGet;
+	protected static final String outputEncoding = "UTF-8";
+	protected HttpURLConnection urlConnection;
 
-	public ResponseModel handleRequest(Boolean isGet, String requestURI, Map<String, String> params) throws IOException {
-		this.isGet = isGet;
+	public ResponseModel handleRequest(String requestURI, Map<String, String> params) throws IOException {
 		String paramsString = getParamsString(params);
 
-		URL url = createUrl(isGet, requestURI, paramsString);
+		URL url = createUrl(requestURI, paramsString);
 		setDefaultConnectionSettings(url);
 
-		if(isPOST()) {
-			setPOSTConnectionSettings();
-			writePOSTParameters(paramsString);
-		}
+		setAdditionalConnectionSettings();
+		additionalWorkWith(paramsString);
 		String responseBody = getResponseBody();
 
 		urlConnection.disconnect();
@@ -43,21 +38,9 @@ public class HttpRequestExecutor {
 		return convertInputStreamToString(inputStream);
 	}
 
-	private void writePOSTParameters(String paramsString) throws IOException {
-		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(urlConnection.getOutputStream());
-		bufferedOutputStream.write(paramsString.getBytes(outputEncoding));
-		bufferedOutputStream.flush();
-		bufferedOutputStream.close();
-	}
+	protected abstract void additionalWorkWith(String paramsString) throws IOException;
 
-	private void setPOSTConnectionSettings() {
-		urlConnection.setDoOutput(true);
-		urlConnection.setChunkedStreamingMode(0);
-	}
-
-	private boolean isPOST() {
-		return !isGet;
-	}
+	protected abstract void setAdditionalConnectionSettings();
 
 	private void setDefaultConnectionSettings(URL url) throws IOException {
 		urlConnection = (HttpURLConnection) url.openConnection();
@@ -65,14 +48,8 @@ public class HttpRequestExecutor {
 		urlConnection.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_SEC);
 	}
 
-	private URL createUrl(Boolean isGet, String requestURI, String paramsString) throws MalformedURLException {
-		URL url = null;
-		if(isGet)
-			url = new URL(requestURI + paramsString);
-		else
-			url = new URL(requestURI);
-		return url;
-	}
+	protected abstract URL createUrl(String requestURI,
+		String paramsString) throws MalformedURLException;
 
 	private String getParamsString(Map<String, String> params) {
 		String paramsString = "";
