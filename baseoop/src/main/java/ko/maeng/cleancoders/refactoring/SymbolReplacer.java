@@ -32,11 +32,11 @@ public class SymbolReplacer {
 
 	private void replaceSymbol(String symbolName) {
 		alreadyReplaced.add(symbolName);
-		stringToReplace = stringToReplace.replace("$" + symbolName,
-			symbolTranslator.getSymbol(symbolName));
+		symbolTranslator.translate(symbolName, this);
 	}
 
 	private boolean shouldReplaceSymbol(String symbolName) {
-		return symbolTranslator.getSymbol(symbolName) != null && !alreadyReplaced.contains(symbolName);
+		return symbolTranslator.getSymbol(symbolName) != null &&
+			!alreadyReplaced.contains(symbolName);
 	}
 }
