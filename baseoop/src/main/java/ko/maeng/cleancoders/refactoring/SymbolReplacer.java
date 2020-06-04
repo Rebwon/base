@@ -5,15 +5,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class SymbolReplacer {
+public class SymbolReplacer {
 	protected String stringToReplace;
 	protected List<String> alreadyReplaced = new ArrayList<>();
 	private final Pattern symbolPattern = Pattern.compile("\\$([a-zA-Z]\\w*)");
 	private Matcher symbolMatcher;
+	private SymbolTranslator symbolTranslator;
 
-	public SymbolReplacer(String s) {
+	public SymbolReplacer(String s, SymbolTranslator symbolTranslator) {
 		this.stringToReplace = s;
 		this.symbolMatcher = symbolPattern.matcher(stringToReplace);
+		this.symbolTranslator = symbolTranslator;
 	}
 
 	public String replace() {
@@ -37,12 +39,11 @@ public abstract class SymbolReplacer {
 
 	private void replaceSymbol(String symbolName) {
 		alreadyReplaced.add(symbolName);
-		stringToReplace = stringToReplace.replace("$" + symbolName, getSymbol(symbolName));
+		stringToReplace = stringToReplace.replace("$" + symbolName,
+			symbolTranslator.getSymbol(symbolName));
 	}
 
 	private boolean shouldReplaceSymbol(String symbolName) {
-		return getSymbol(symbolName) != null && !alreadyReplaced.contains(symbolName);
+		return symbolTranslator.getSymbol(symbolName) != null && !alreadyReplaced.contains(symbolName);
 	}
-
-	abstract protected String getSymbol(String symbolName);
 }

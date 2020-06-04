@@ -1,10 +1,6 @@
 package ko.maeng.cleancoders.refactoring;
 
-public class MyReplacer extends SymbolReplacer {
-	public MyReplacer(String s) {
-		super(s);
-	}
-
+public class MyReplacer extends SymbolTranslator {
 	@Override
 	protected String getSymbol(String symbolName) {
 		return "__";

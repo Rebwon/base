@@ -8,7 +8,7 @@ class SymbolReplacerTest {
 
 	@Test
 	void foo() {
-		MyReplacer replacer = new MyReplacer("$ss aa $bb dd ff ss");
+		SymbolReplacer replacer = new SymbolReplacer("$ss aa $bb dd ff ss", new MyReplacer());
 		assertThat(replacer.replace()).isEqualTo("__ aa __ dd ff ss");
 	}
 }
