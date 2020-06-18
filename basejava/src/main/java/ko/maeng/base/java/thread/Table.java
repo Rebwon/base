@@ -7,7 +7,7 @@ public class Table {
 	private final BlockingQueue<String> buffer;
 
 	public Table(int count) {
-		this.buffer = new ArrayBlockingQueue<String>(10);
+		this.buffer = new ArrayBlockingQueue<>(10);
 	}
 
 	public void put(String packet) throws InterruptedException {
