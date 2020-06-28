@@ -34,4 +34,8 @@ public class Post {
 	public void write(Comment comment) {
 		this.comments.add(comment);
 	}
+
+	public boolean isSameWriter(Account account) {
+		return this.writer.equals(account);
+	}
 }

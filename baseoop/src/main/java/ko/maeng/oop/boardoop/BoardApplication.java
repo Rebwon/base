@@ -20,6 +20,8 @@ public class BoardApplication {
 		Activities activities = new Activities();
 		Account account = Account.register(new Email("chulsu@naver.com"), new Password("1234567"),
 			new Name("Rebwon"));
+		Account account1 = Account.register(new Email("kitty@naver.com"), new Password("1234567"),
+			new Name("kitty"));
 
 		Board board = new Board(new Category("객체지향 프로그래밍"));
 		Post post = Post.create(new Title("게시글 제목"), new Content("내용"), account);
@@ -29,10 +31,9 @@ public class BoardApplication {
 
 		Post selectPost = board.findPost(post.getId());
 
-		Comment comment = Comment.create(account, new Content("정말 좋은 글입니다."));
+		Comment comment = Comment.create(account1, new Content("정말 좋은 글입니다."));
 		selectPost.write(comment);
-
-		activities.addActivity(Activity.writeComment(account, comment, new CommentScoreCondition()));
+		activities.addActivity(Activity.writeComment(account1, comment, new CommentScoreCondition()));
 
 		Integer totalActivityScore = activities.calculateTotalScore(account.getId());
 		System.out.println(totalActivityScore);

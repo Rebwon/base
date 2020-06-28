@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 public class Activities {
-	private List<Activity> activities = new ArrayList<>();
+	private final List<Activity> activities = new ArrayList<>();
 
 	public void addActivity(Activity activity) {
 		this.activities.add(activity);
