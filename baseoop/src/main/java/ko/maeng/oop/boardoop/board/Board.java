@@ -1,11 +1,8 @@
 package ko.maeng.oop.boardoop.board;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ko.maeng.oop.boardoop.common.Id;
 import ko.maeng.oop.boardoop.post.Post;
-import ko.maeng.oop.boardoop.post.PostNotFoundException;
+import ko.maeng.oop.boardoop.post.Posts;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -14,11 +11,12 @@ import lombok.Getter;
 public class Board {
 	private Id id;
 	private Category category;
-	private List<Post> posts = new ArrayList<>();
+	private Posts posts;
 
 	public Board(Category category) {
 		this.id = new Id();
 		this.category = category;
+		this.posts = new Posts();
 	}
 
 	public void write(Post post) {
@@ -26,9 +24,10 @@ public class Board {
 	}
 
 	public Post findPost(Id id) {
-		return this.posts.stream()
-			.filter(p -> p.getId().equals(id))
-			.findFirst()
-			.orElseThrow(PostNotFoundException::new);
+		return posts.fineOne(id);
+	}
+
+	public boolean hasEmptyPosts() {
+		return posts.isEmpty();
 	}
 }

@@ -38,4 +38,8 @@ public class Post {
 	public boolean isSameWriter(Account account) {
 		return this.writer.equals(account);
 	}
+
+	public boolean hasEmptyComments() {
+		return comments.isEmpty();
+	}
 }
