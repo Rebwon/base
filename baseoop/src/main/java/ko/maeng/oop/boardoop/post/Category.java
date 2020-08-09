@@ -1,4 +1,4 @@
-package ko.maeng.oop.boardoop.board;
+package ko.maeng.oop.boardoop.post;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

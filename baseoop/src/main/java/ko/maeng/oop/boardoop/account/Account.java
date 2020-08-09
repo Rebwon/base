@@ -1,5 +1,8 @@
 package ko.maeng.oop.boardoop.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ko.maeng.oop.boardoop.common.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,6 +14,7 @@ public class Account {
 	private Email email;
 	private Password password;
 	private Name name;
+	private List<Account> follows = new ArrayList<>();
 
 	private Account(Email email, Password password, Name name) {
 		this.id = new Id();
