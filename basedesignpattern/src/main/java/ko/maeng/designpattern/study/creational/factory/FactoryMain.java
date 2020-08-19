@@ -1,4 +1,4 @@
-package ko.maeng.designpattern.study.factory;
+package ko.maeng.designpattern.study.creational.factory;
 
 import java.util.HashMap;
 import java.util.Map;
