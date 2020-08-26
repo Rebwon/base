@@ -1,4 +1,4 @@
-package ko.maeng.designpattern.study.singleton;
+package ko.maeng.designpattern.study.creational.singleton;
 
 public class Singleton {
     private static Singleton instance = new Singleton();
